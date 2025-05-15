@@ -52,7 +52,7 @@ function TranslateEditor() {
               }}
               initialContentHTML={config.translatedText}
               onChange={(html) =>
-                setConfig(prev => ({...prev, translatedText: html}))
+                setConfig(prev => ({...prev, textToTranslate: html}))
               }
             />
             <RichToolbar
