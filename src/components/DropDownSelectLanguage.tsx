@@ -2,6 +2,8 @@ import {StyleSheet, View, Text} from 'react-native';
 import {Dropdown} from "react-native-element-dropdown";
 import {useState} from "react";
 import {LANGUAGES, LanguageCode} from "../constants/languages";
+import {COLORS} from "../constants";
+import {useTheme} from "../hooks/useTheme";
 
 interface DropDownSelectLanguageProps {
   onLanguageChange: (language: LanguageCode, index: number) => void;
@@ -11,9 +13,10 @@ interface DropDownSelectLanguageProps {
 export default function DropDownSelectLanguage({onLanguageChange}: DropDownSelectLanguageProps) {
   const [value, setValue] = useState<string>("Оберіть мову");
   const [isFocus, setIsFocus] = useState(false);
+  const {theme} = useTheme()
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: COLORS[theme].APP_MAIN_BG_COLOR,}}>
       <Dropdown
         style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
         placeholderStyle={styles.placeholderStyle}
@@ -41,9 +44,8 @@ export default function DropDownSelectLanguage({onLanguageChange}: DropDownSelec
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     paddingVertical: 16,
-    flex: 1
+    flex: 0.5
   },
   dropdown: {
     height: 50,
