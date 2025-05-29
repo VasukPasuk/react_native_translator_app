@@ -1,6 +1,6 @@
 import {Button, StyleSheet, View, Text, Image} from 'react-native';
 import {actions, RichEditor, RichToolbar} from "react-native-pell-rich-editor";
-import {useContext, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import DropDownSelectLanguage from "./src/components/DropDownSelectLanguage";
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import translate from "./src/api/translate.api";
@@ -44,11 +44,10 @@ function TranslateEditor() {
           <View style={styles.richEditorContainer}>
             <RichEditor
               ref={richText}
-              placeholder="Текст до перекладу"
               initialHeight={200}
               editorStyle={{
                 backgroundColor: COLORS[theme].APP_MAIN_BG_COLOR,
-                color: '#000',
+                color: COLORS[theme].SECOND_COLOR,
               }}
               initialContentHTML={config.translatedText}
               onChange={(html) =>
@@ -67,9 +66,13 @@ function TranslateEditor() {
                 actions.undo,
                 actions.redo,
               ]}
+              style={{
+                backgroundColor: COLORS[theme].THIRD_COLOR,
+              }}
             />
             <Button
               title="Перевести"
+              color={COLORS[theme].FIRST_COLOR}
               onPress={async () => {
                 try {
                   const res = await translate({
@@ -89,14 +92,14 @@ function TranslateEditor() {
           </View>
 
           <View style={styles.footer}>
-            <Text style={{fontStyle: 'italic'}}>
+            <Text style={{fontStyle: 'italic', color: COLORS[theme].SECOND_COLOR}}>
               Made by mekoya
             </Text>
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
               <Image source={require('./assets/logo.png')}  style={{width: 45, height: 45}}>
 
               </Image>
-              <Text>
+              <Text style={{color: COLORS[theme].SECOND_COLOR}}>
                 2025
               </Text>
             </View>

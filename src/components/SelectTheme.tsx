@@ -2,6 +2,7 @@ import {StyleSheet, View} from "react-native";
 import Icon from 'react-native-vector-icons/Feather';
 import {useTheme} from "../hooks/useTheme";
 import {Theme} from "./ThemeProvider";
+import {COLORS} from "../constants";
 
 export default function SelectTheme({onThemeChange}: { onThemeChange?: (theme: Theme) => void }) {
   const {setTheme, theme} = useTheme()
@@ -22,15 +23,16 @@ export default function SelectTheme({onThemeChange}: { onThemeChange?: (theme: T
   }[theme]
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container}}>
       <Icon
+        color={COLORS[theme].SECOND_COLOR}
         size={22}
         name={themeElement.icon}
         onPress={() => {
           setTheme(prev => themeElement.next)
           onThemeChange && onThemeChange(themeElement.next)
         }}
-        style={styles.icon}
+        style={{...styles.icon, borderColor: COLORS[theme].SECOND_COLOR}}
       />
     </View>
   );
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
   icon: {
     padding: 16,
     borderRadius: 8,
-    borderColor: 'black',
     borderWidth: 0.25,
+
   }
 });

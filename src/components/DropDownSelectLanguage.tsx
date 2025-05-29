@@ -16,13 +16,15 @@ export default function DropDownSelectLanguage({onLanguageChange}: DropDownSelec
   const {theme} = useTheme()
 
   return (
-    <View style={{...styles.container, backgroundColor: COLORS[theme].APP_MAIN_BG_COLOR,}}>
+    <View style={styles.container}>
       <Dropdown
-        style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
-        placeholderStyle={styles.placeholderStyle}
+        style={[styles.dropdown, {borderColor: COLORS[theme].SECOND_COLOR} , isFocus && {borderColor: 'blue'}]}
+        placeholderStyle={{...styles.placeholderStyle, color: COLORS[theme].SECOND_COLOR}}
         selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
+        inputSearchStyle={{...styles.inputSearchStyle, color: COLORS[theme].SECOND_COLOR}}
+        containerStyle={{backgroundColor: COLORS[theme].APP_MAIN_BG_COLOR,}}
         iconStyle={styles.iconStyle}
+        itemTextStyle={{color: COLORS[theme].SECOND_COLOR}}
         data={LANGUAGES}
         search
         maxHeight={300}
@@ -49,7 +51,6 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 50,
-    borderColor: 'gray',
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
@@ -59,7 +60,6 @@ const styles = StyleSheet.create({
   },
   label: {
     position: 'absolute',
-    backgroundColor: 'white',
     left: 22,
     top: 8,
     zIndex: 999,
