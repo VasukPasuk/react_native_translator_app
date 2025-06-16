@@ -9,17 +9,22 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~5.0.4",
     "axios": "^1.9.0",
     "expo": "~53.0.7",
     "expo-status-bar": "~2.2.3",
     "lodash": "^4.17.21",
+    "metro-config": "^0.82.4",
     "react": "19.0.0",
+    "react-dom": "19.0.0",
     "react-native": "0.79.2",
     "react-native-element-dropdown": "^2.12.4",
     "react-native-pell-rich-editor": "^1.9.0",
     "react-native-safe-area-context": "^5.4.0",
     "react-native-vector-icons": "^10.2.0",
-    "react-native-webview": "^13.13.5"
+    "react-native-web": "^0.20.0",
+    "react-native-webview": "^13.13.5",
+    "react-quill-new": "^3.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

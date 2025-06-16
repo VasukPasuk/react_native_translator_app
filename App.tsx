@@ -1,5 +1,5 @@
-import {Button, StyleSheet, View, Text, Image} from 'react-native';
-import {actions, RichEditor, RichToolbar} from "react-native-pell-rich-editor";
+import {Button, Image, Platform, StyleSheet, Text, View} from 'react-native';
+import {RichEditor} from "react-native-pell-rich-editor";
 import {useRef, useState} from "react";
 import DropDownSelectLanguage from "./src/components/DropDownSelectLanguage";
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
@@ -8,6 +8,8 @@ import {COLORS} from "./src/constants";
 import SelectTheme from "./src/components/SelectTheme";
 import {useTheme} from "./src/hooks/useTheme";
 import {ThemeProvider} from "./src/components/ThemeProvider";
+import MobileCompatibleRichEditor from "./src/components/editors/MobileCompatibleRichEditor";
+import WebCompatibleRichEditor from "./src/components/editors/WebCompatibleRichEditor";
 
 type Config = {
   outputLang: string,
@@ -24,8 +26,30 @@ function TranslateEditor() {
 
   const {theme} = useTheme()
 
+  const setConfigTranslatedText = (html: string) => setConfig(prev => ({...prev, textToTranslate: html}))
 
   const richText = useRef<RichEditor>(null);
+
+  console.log(config)
+
+  const editor = (() => {
+    switch (Platform.OS) {
+      case 'web':
+        return (
+          <WebCompatibleRichEditor
+            setTextToTranslate={setConfigTranslatedText}
+            initialContentHTML={config.textToTranslate}
+          />)
+      default:
+        return (
+          <MobileCompatibleRichEditor
+            setTextToTranslate={setConfigTranslatedText}
+            initialContentHTML={config.textToTranslate}
+          />)
+
+    }
+  })()
+
 
   return (
     <SafeAreaProvider>
@@ -42,34 +66,7 @@ function TranslateEditor() {
 
 
           <View style={styles.richEditorContainer}>
-            <RichEditor
-              ref={richText}
-              initialHeight={200}
-              editorStyle={{
-                backgroundColor: COLORS[theme].APP_MAIN_BG_COLOR,
-                color: COLORS[theme].SECOND_COLOR,
-              }}
-              initialContentHTML={config.translatedText}
-              onChange={(html) =>
-                setConfig(prev => ({...prev, textToTranslate: html}))
-              }
-            />
-            <RichToolbar
-              editor={richText}
-              actions={[
-                actions.setBold,
-                actions.setItalic,
-                actions.insertBulletsList,
-                actions.insertOrderedList,
-                actions.setStrikethrough,
-                actions.setUnderline,
-                actions.undo,
-                actions.redo,
-              ]}
-              style={{
-                backgroundColor: COLORS[theme].THIRD_COLOR,
-              }}
-            />
+            {editor}
             <Button
               title="Перевести"
               color={COLORS[theme].FIRST_COLOR}
@@ -82,6 +79,7 @@ function TranslateEditor() {
                   setConfig(prev => ({
                     ...prev,
                     translatedText: res.data[0][0][0],
+                    textToTranslate: res.data[0][0][0]
                   }));
                   richText.current?.setContentHTML(res.data[0][0][0]);
                 } catch (error) {
@@ -96,7 +94,7 @@ function TranslateEditor() {
               Made by mekoya
             </Text>
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-              <Image source={require('./assets/logo.png')}  style={{width: 45, height: 45}}>
+              <Image source={require('./assets/logo.png')} style={{width: 45, height: 45}}>
 
               </Image>
               <Text style={{color: COLORS[theme].SECOND_COLOR}}>
