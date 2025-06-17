@@ -1,14 +1,15 @@
 import ReactQuill from "react-quill-new";
-import {useMemo, useState} from "react";
+import React, {useMemo} from "react";
 import 'react-quill-new/dist/quill.snow.css';
-import {Theme} from "../ThemeProvider";
 import {COLORS} from "../../constants";
 import {useTheme} from "../../hooks/useTheme";
+import {RichEditor} from "react-native-pell-rich-editor";
 
 
 interface WebCompatibleRichEditorProps {
   initialContentHTML: string,
   setTextToTranslate: (html: string) => void,
+  richText: React.RefObject<RichEditor | null>
 }
 
 const formats = [

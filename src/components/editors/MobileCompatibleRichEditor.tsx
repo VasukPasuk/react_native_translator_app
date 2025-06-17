@@ -1,16 +1,16 @@
 import {actions, RichEditor, RichToolbar} from "react-native-pell-rich-editor";
 import {COLORS} from "../../constants";
-import {useRef} from "react";
+import React, {useEffect, useRef} from "react";
 import {useTheme} from "../../hooks/useTheme";
 
 interface MobileCompatibleRichEditorProps {
   initialContentHTML: string,
   setTextToTranslate: (html: string) => void,
+  richText: React.RefObject<RichEditor | null>
 }
 
-function MobileCompatibleRichEditor({setTextToTranslate, initialContentHTML}: MobileCompatibleRichEditorProps) {
+function MobileCompatibleRichEditor({setTextToTranslate, initialContentHTML, richText}: MobileCompatibleRichEditorProps) {
   const {theme} = useTheme()
-  const richText = useRef<RichEditor>(null);
   return (
     <>
       <RichEditor
@@ -23,7 +23,6 @@ function MobileCompatibleRichEditor({setTextToTranslate, initialContentHTML}: Mo
         initialContentHTML={initialContentHTML}
         onChange={(html) => {
           setTextToTranslate(html)
-          // setConfig(prev => ({...prev, textToTranslate: html}))
         }}
       />
       <RichToolbar

@@ -8,14 +8,18 @@ import {COLORS} from "./src/constants";
 import SelectTheme from "./src/components/SelectTheme";
 import {useTheme} from "./src/hooks/useTheme";
 import {ThemeProvider} from "./src/components/ThemeProvider";
-import MobileCompatibleRichEditor from "./src/components/editors/MobileCompatibleRichEditor";
-import WebCompatibleRichEditor from "./src/components/editors/WebCompatibleRichEditor";
 
 type Config = {
   outputLang: string,
   translatedText: string,
   textToTranslate: string,
 };
+
+const PlatformRichEditor = Platform.select({
+  web: () => require('./src/components/editors/WebCompatibleRichEditor').default,
+  default: () => require('./src/components/editors/MobileCompatibleRichEditor').default,
+})();
+
 
 function TranslateEditor() {
   const [config, setConfig] = useState<Config>({
@@ -30,43 +34,26 @@ function TranslateEditor() {
 
   const richText = useRef<RichEditor>(null);
 
-  console.log(config)
-
-  const editor = (() => {
-    switch (Platform.OS) {
-      case 'web':
-        return (
-          <WebCompatibleRichEditor
-            setTextToTranslate={setConfigTranslatedText}
-            initialContentHTML={config.textToTranslate}
-          />)
-      default:
-        return (
-          <MobileCompatibleRichEditor
-            setTextToTranslate={setConfigTranslatedText}
-            initialContentHTML={config.textToTranslate}
-          />)
-
-    }
-  })()
-
-
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{...styles.container, backgroundColor: COLORS[theme].APP_MAIN_BG_COLOR}}>
         <View style={{flex: 1, width: '100%', padding: 15}}>
           <View style={{flexDirection: 'row', columnGap: 15, width: '100%'}}>
             <DropDownSelectLanguage
-              onLanguageChange={(language) =>
+              onLanguageChange={(language) => {
                 setConfig(prev => ({...prev, outputLang: language}))
-              }
+              }}
             />
             <SelectTheme onThemeChange={(newTheme) => setConfig(prev => ({...prev, theme: newTheme}))}/>
           </View>
 
 
           <View style={styles.richEditorContainer}>
-            {editor}
+            <PlatformRichEditor
+              setTextToTranslate={setConfigTranslatedText}
+              initialContentHTML={config.textToTranslate}
+              richText={Platform.OS === "web" ? null : richText}
+            />
             <Button
               title="Перевести"
               color={COLORS[theme].FIRST_COLOR}
@@ -76,6 +63,8 @@ function TranslateEditor() {
                     text: config.textToTranslate,
                     outputLang: config.outputLang,
                   });
+
+
                   setConfig(prev => ({
                     ...prev,
                     translatedText: res.data[0][0][0],

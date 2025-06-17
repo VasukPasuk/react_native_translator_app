@@ -6,7 +6,7 @@ import {COLORS} from "../constants";
 import {useTheme} from "../hooks/useTheme";
 
 interface DropDownSelectLanguageProps {
-  onLanguageChange: (language: LanguageCode, index: number) => void;
+  onLanguageChange: (language: LanguageCode) => void;
 }
 
 
@@ -18,7 +18,7 @@ export default function DropDownSelectLanguage({onLanguageChange}: DropDownSelec
   return (
     <View style={styles.container}>
       <Dropdown
-        style={[styles.dropdown, {borderColor: COLORS[theme].SECOND_COLOR} , isFocus && {borderColor: 'blue'}]}
+        style={[styles.dropdown, {borderColor: COLORS[theme].SECOND_COLOR}, isFocus && {borderColor: 'blue'}]}
         placeholderStyle={{...styles.placeholderStyle, color: COLORS[theme].SECOND_COLOR}}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={{...styles.inputSearchStyle, color: COLORS[theme].SECOND_COLOR}}
@@ -36,6 +36,7 @@ export default function DropDownSelectLanguage({onLanguageChange}: DropDownSelec
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={item => {
+          onLanguageChange(item.value)
           setValue(item);
           setIsFocus(false);
         }}
