@@ -1,6 +1,6 @@
 import {Button, Image, Platform, StyleSheet, Text, View} from 'react-native';
 import {RichEditor} from "react-native-pell-rich-editor";
-import {useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import DropDownSelectLanguage from "./src/components/DropDownSelectLanguage";
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import translate from "./src/api/translate.api";
@@ -8,6 +8,7 @@ import {COLORS} from "./src/constants";
 import SelectTheme from "./src/components/SelectTheme";
 import {useTheme} from "./src/hooks/useTheme";
 import {ThemeProvider} from "./src/components/ThemeProvider";
+import * as Clipboard from "expo-clipboard";
 
 type Config = {
   outputLang: string,
@@ -33,6 +34,11 @@ function TranslateEditor() {
   const setConfigTranslatedText = (html: string) => setConfig(prev => ({...prev, textToTranslate: html}))
 
   const richText = useRef<RichEditor>(null);
+
+
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(config.translatedText);
+  };
 
   return (
     <SafeAreaProvider>
@@ -63,7 +69,7 @@ function TranslateEditor() {
                     text: config.textToTranslate,
                     outputLang: config.outputLang,
                   });
-
+                  console.log(res.data)
 
                   setConfig(prev => ({
                     ...prev,
@@ -76,6 +82,7 @@ function TranslateEditor() {
                 }
               }}
             />
+            <Button title={'Скопіювати'} onPress={copyToClipboard}/>
           </View>
 
           <View style={styles.footer}>
